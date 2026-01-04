@@ -1,0 +1,111 @@
+/* SplashScreen Component - Modern Design */
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-splash);
+    animation: fadeIn var(--transition-slow) ease-in;
+  }
+  
+  .splash-screen.fade-out {
+    animation: fadeOut var(--transition-slow) ease-out forwards;
+  }
+  
+  .splash-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    width: 80vw;
+    height: 80vh;
+    max-width: 80vw;
+    max-height: 80vh;
+    padding: 10vh 10vw;
+    box-sizing: border-box;
+  }
+  
+  .splash-icon {
+    width: auto;
+    height: auto;
+    max-width: 60vw;
+    max-height: 50vh;
+    min-width: 80px;
+    min-height: 80px;
+    object-fit: contain;
+    animation: pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 8px 16px rgba(99, 102, 241, 0.3));
+  }
+  
+  .splash-title {
+    font-size: clamp(24px, 5vw, 56px);
+    font-weight: var(--font-weight-bold);
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: var(--spacing-lg) 0 0 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  
+  /* Tablet Responsive */
+  @media (max-width: 768px) {
+    .splash-content {
+      width: 80vw;
+      height: 80vh;
+      padding: 10vh 10vw;
+    }
+  
+    .splash-icon {
+      max-width: 50vw;
+      max-height: 45vh;
+    }
+  
+    .splash-title {
+      font-size: clamp(20px, 6vw, 40px);
+    }
+  }
+  
+  /* Mobile Responsive - iPhone 14 Plus */
+  @media (max-width: 428px) {
+    .splash-content {
+      width: 85vw;
+      height: 85vh;
+      padding: 7.5vh 7.5vw;
+    }
+  
+    .splash-icon {
+      max-width: 55vw;
+      max-height: 45vh;
+      min-width: 70px;
+      min-height: 70px;
+    }
+  
+    .splash-title {
+      font-size: clamp(18px, 7vw, 32px);
+      margin-top: var(--spacing-md);
+    }
+  }
+  
+  /* Small Mobile */
+  @media (max-width: 375px) {
+    .splash-icon {
+      max-width: 50vw;
+      max-height: 40vh;
+      min-width: 60px;
+      min-height: 60px;
+    }
+  
+    .splash-title {
+      font-size: clamp(16px, 8vw, 28px);
+    }
+  }
+  

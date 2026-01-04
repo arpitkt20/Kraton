@@ -1,0 +1,132 @@
+/* BodyTracker Component - Modern Design */
+
+.body-tracker {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bg-secondary);
+  }
+  
+  .body-tracker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--gradient-dark);
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .back-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    color: var(--text-inverse);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .back-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+  }
+  
+  .back-button:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .body-tracker-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-inverse);
+    margin: 0;
+  }
+  
+  .body-tracker-tabs {
+    display: flex;
+    background: var(--bg-primary);
+    border-bottom: 2px solid var(--border-light);
+    padding: 0 var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .tab-button {
+    flex: 1;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    min-height: var(--touch-target-min);
+    position: relative;
+  }
+  
+  .tab-button:hover {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+  }
+  
+  .tab-button.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    background: linear-gradient(to bottom, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
+  }
+  
+  .tab-button:active {
+    transform: scale(0.98);
+  }
+  
+  .body-tracker-content {
+    flex: 1;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Mobile Responsive - iPhone 14 Plus */
+  @media (max-width: 428px) {
+    .body-tracker-header {
+      padding: var(--spacing-md);
+    }
+  
+    .body-tracker-title {
+      font-size: var(--font-size-lg);
+    }
+  
+    .body-tracker-tabs {
+      padding: 0;
+    }
+  
+    .tab-button {
+      padding: var(--spacing-md) var(--spacing-sm);
+      font-size: var(--font-size-sm);
+    }
+  
+    .body-tracker-content {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+  }
+  
+  /* Small screens */
+  @media (max-width: 375px) {
+    .tab-button {
+      padding: 12px 8px;
+      font-size: 12px;
+    }
+  }
+  

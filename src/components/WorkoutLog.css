@@ -1,0 +1,371 @@
+/* WorkoutLog Component - Modern Design */
+
+.workout-log {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bg-secondary);
+    font-family: var(--font-family);
+  }
+  
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--gradient-dark);
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .app-name-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: none;
+    border: none;
+    padding: var(--spacing-xs);
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity var(--transition-base);
+    min-height: var(--touch-target-min);
+    min-width: var(--touch-target-min);
+    justify-content: center;
+    border-radius: var(--radius-md);
+  }
+  
+  .app-name-link:hover {
+    opacity: 0.9;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  .app-name-link:active {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+  
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    object-fit: contain;
+    display: block;
+  }
+  
+  .banner-logo {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+  }
+  
+  .app-name {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-inverse);
+    letter-spacing: 0.5px;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+  
+  .header-icon-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    border-radius: var(--radius-md);
+    color: var(--text-inverse);
+  }
+  
+  .header-icon-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+  }
+  
+  .header-icon-button:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .header-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-inverse);
+    cursor: pointer;
+  }
+  
+  /* Menu Dropdown */
+  .menu-container {
+    position: relative;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + var(--spacing-sm));
+    right: 0;
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-2xl);
+    min-width: 200px;
+    z-index: var(--z-dropdown);
+    overflow: hidden;
+    animation: slideDown var(--transition-slow) ease-out;
+    border: 1px solid var(--border-light);
+  }
+  
+  .menu-item {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    border-bottom: 1px solid var(--border-light);
+    min-height: var(--touch-target-min);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+  
+  .menu-item:last-child {
+    border-bottom: none;
+  }
+  
+  .menu-item:hover {
+    background: var(--bg-tertiary);
+    color: var(--color-primary);
+  }
+  
+  .menu-item:active {
+    background: var(--bg-secondary);
+    transform: scale(0.98);
+  }
+  
+  /* Date Navigation Bar */
+  .date-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-dark-secondary);
+    border-bottom: 3px solid;
+    border-image: var(--gradient-primary) 1;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .nav-arrow {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary-light);
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+  }
+  
+  .nav-arrow:hover {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--color-primary);
+    transform: scale(1.1);
+  }
+  
+  .nav-arrow:active {
+    transform: scale(0.95);
+  }
+  
+  .date-text {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-inverse);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    background: var(--bg-secondary);
+  }
+  
+  .main-content.has-workouts {
+    align-items: flex-start;
+    padding-top: var(--spacing-xl);
+  }
+  
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2xl);
+    width: 100%;
+    max-width: 420px;
+  }
+  
+  .empty-text {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: var(--font-weight-normal);
+    text-align: center;
+  }
+  
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    width: 100%;
+  }
+  
+  .action-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--spacing-lg);
+    background: var(--bg-primary);
+    border: 2px solid var(--border-light);
+    padding: var(--spacing-lg);
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: all var(--transition-base);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    min-height: var(--touch-target-comfortable);
+  }
+  
+  .action-button:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-colored);
+    transform: translateY(-2px);
+  }
+  
+  .action-button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .action-icon-circle {
+    width: 56px;
+    height: 56px;
+    border: 3px solid;
+    border-image: var(--gradient-primary) 1;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  }
+  
+  .action-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+  
+  .action-text {
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
+    flex: 1;
+  }
+  
+  /* Mobile Responsive - iPhone 14 Plus Optimized */
+  @media (max-width: 428px) {
+    .header {
+      padding: var(--spacing-md);
+    }
+  
+    .banner-logo {
+      height: 28px;
+    }
+  
+    .date-nav {
+      padding: var(--spacing-md);
+    }
+  
+    .main-content {
+      padding: var(--spacing-xl) var(--spacing-md);
+    }
+  
+    .empty-state {
+      gap: var(--spacing-xl);
+    }
+  
+    .action-buttons {
+      gap: var(--spacing-md);
+    }
+  
+    .action-button {
+      padding: var(--spacing-md);
+      min-height: 64px;
+    }
+  
+    .action-icon-circle {
+      width: 48px;
+      height: 48px;
+    }
+  
+    .action-icon {
+      width: 24px;
+      height: 24px;
+    }
+  
+    .action-text {
+      font-size: var(--font-size-base);
+    }
+  }
+  
+  /* Small screens */
+  @media (max-width: 375px) {
+    .header {
+      padding: 12px;
+    }
+  
+    .date-nav {
+      padding: 12px;
+    }
+  
+    .action-button {
+      padding: 14px;
+    }
+  }
+  

@@ -1,0 +1,169 @@
+/* WorkoutSelector Component - Modern Design */
+
+.workout-selector {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bg-secondary);
+  }
+  
+  .workout-selector-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--gradient-dark);
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .back-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    color: var(--text-inverse);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .back-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+  }
+  
+  .back-button:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .workout-selector-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-inverse);
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .workout-selector-content {
+    flex: 1;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .workouts-empty {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    color: var(--text-secondary);
+  }
+  
+  .workouts-empty p {
+    margin: var(--spacing-sm) 0;
+    font-size: var(--font-size-base);
+  }
+  
+  .workouts-empty-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+  }
+  
+  .workouts-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .workout-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    border: 1px solid var(--border-light);
+    min-height: var(--touch-target-comfortable);
+  }
+  
+  .workout-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary);
+  }
+  
+  .workout-item:active {
+    transform: translateY(0) scale(0.98);
+  }
+  
+  .workout-info {
+    flex: 1;
+  }
+  
+  .workout-name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+  }
+  
+  .workout-meta {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .workout-arrow {
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+    margin-left: var(--spacing-md);
+    transition: all var(--transition-base);
+  }
+  
+  .workout-item:hover .workout-arrow {
+    color: var(--color-primary);
+    transform: translateX(4px);
+  }
+  
+  /* Mobile Responsive - iPhone 14 Plus */
+  @media (max-width: 428px) {
+    .workout-selector-header {
+      padding: var(--spacing-md);
+    }
+  
+    .workout-selector-title {
+      font-size: var(--font-size-lg);
+    }
+  
+    .workout-selector-content {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+  
+    .workout-item {
+      padding: var(--spacing-md);
+    }
+  
+    .workout-name {
+      font-size: var(--font-size-base);
+    }
+  
+    .workout-meta {
+      font-size: var(--font-size-xs);
+    }
+  }
+  

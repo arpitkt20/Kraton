@@ -1,0 +1,259 @@
+/* Settings Component - Modern Design */
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bg-secondary);
+  }
+  
+  .settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--gradient-dark);
+    color: var(--text-inverse);
+    box-shadow: var(--shadow-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .back-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    color: var(--text-inverse);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .back-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+  }
+  
+  .back-button:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .settings-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-inverse);
+    margin: 0;
+  }
+  
+  .settings-content {
+    flex: 1;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .settings-section {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-lg);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-base);
+  }
+  
+  .settings-section:hover {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .settings-section-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-lg) 0;
+  }
+  
+  .settings-item {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .settings-label {
+    display: block;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .rest-time-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+  
+  .rest-time-button {
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--gradient-primary);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    min-width: 60px;
+    min-height: var(--touch-target-min);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .rest-time-button:hover:not(:disabled) {
+    box-shadow: var(--shadow-colored);
+    transform: translateY(-1px);
+  }
+  
+  .rest-time-button:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+  }
+  
+  .rest-time-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .rest-time-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    min-width: 120px;
+  }
+  
+  .rest-time-input {
+    width: 100%;
+    max-width: 120px;
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: all var(--transition-base);
+    min-height: var(--touch-target-comfortable);
+  }
+  
+  .rest-time-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+  
+  .rest-time-unit {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .rest-time-preview {
+    font-size: var(--font-size-base);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+  
+  .rest-time-presets {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    margin-top: var(--spacing-md);
+  }
+  
+  .preset-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    min-height: var(--touch-target-min);
+  }
+  
+  .preset-button:hover {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-1px);
+  }
+  
+  .preset-button:active {
+    transform: translateY(0) scale(0.98);
+  }
+  
+  /* Mobile Responsive - iPhone 14 Plus */
+  @media (max-width: 428px) {
+    .settings-header {
+      padding: var(--spacing-md);
+    }
+  
+    .settings-title {
+      font-size: var(--font-size-lg);
+    }
+  
+    .settings-content {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+  
+    .settings-section {
+      padding: var(--spacing-lg);
+    }
+  
+    .rest-time-controls {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--spacing-md);
+    }
+  
+    .rest-time-button {
+      width: 100%;
+    }
+  
+    .rest-time-display {
+      width: 100%;
+      min-width: auto;
+    }
+  
+    .rest-time-input {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+  
+  /* Small screens */
+  @media (max-width: 375px) {
+    .settings-section {
+      padding: var(--spacing-md);
+    }
+  
+    .preset-button {
+      flex: 1;
+      min-width: calc(50% - var(--spacing-xs));
+    }
+  }
+  

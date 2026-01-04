@@ -1,0 +1,269 @@
+/* LoggedWorkouts Component - Modern Design */
+
+.logged-workouts {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .logged-workouts.single-workout {
+    max-width: 600px;
+  }
+  
+  .logged-workouts-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-lg) 0;
+  }
+  
+  .workouts-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .workout-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-base);
+  }
+  
+  .workout-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-medium);
+    transform: translateY(-2px);
+  }
+  
+  .workouts-list.single-workout-list .workout-card {
+    box-shadow: var(--shadow-xl);
+    border: 2px solid;
+    border-image: var(--gradient-primary) 1;
+  }
+  
+  .workout-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--border-light);
+  }
+  
+  .workout-card-info {
+    flex: 1;
+  }
+  
+  .workout-card-name {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+  }
+  
+  .workout-card-regime {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: var(--font-weight-medium);
+  }
+  
+  .workout-card-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .edit-workout-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    flex-shrink: 0;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .edit-workout-button:hover {
+    background: rgba(99, 102, 241, 0.1);
+    transform: scale(1.1);
+  }
+  
+  .edit-workout-button:active {
+    transform: scale(0.95);
+  }
+  
+  .delete-workout-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    color: var(--color-danger);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    flex-shrink: 0;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+  }
+  
+  .delete-workout-button:hover {
+    background: rgba(239, 68, 68, 0.1);
+    transform: scale(1.1);
+  }
+  
+  .delete-workout-button:active {
+    transform: scale(0.95);
+  }
+  
+  .workout-exercises {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .exercise-summary {
+    padding: var(--spacing-md);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-base);
+  }
+  
+  .exercise-summary:hover {
+    background: var(--bg-secondary);
+    border-color: var(--border-medium);
+  }
+  
+  .exercise-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .exercise-summary-name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+  }
+  
+  .exercise-summary-sets {
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+  
+  .exercise-summary-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+  
+  .set-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-light);
+    transition: all var(--transition-base);
+  }
+  
+  .set-summary:hover {
+    border-color: var(--border-medium);
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .set-summary-values {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+  }
+  
+  .set-summary-values span {
+    white-space: nowrap;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+  }
+  
+  .set-summary-notes {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-xs);
+    border-top: 1px solid var(--border-light);
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+  
+  .set-notes-icon {
+    flex-shrink: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+  }
+  
+  .set-notes-text {
+    flex: 1;
+    word-wrap: break-word;
+  }
+  
+  /* Mobile Responsive - iPhone 14 Plus */
+  @media (max-width: 428px) {
+    .logged-workouts-title {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--spacing-md);
+    }
+  
+    .workout-card {
+      padding: var(--spacing-md);
+    }
+  
+    .workout-card-name {
+      font-size: var(--font-size-lg);
+    }
+  
+    .exercise-summary {
+      padding: var(--spacing-sm);
+    }
+  
+    .exercise-summary-name {
+      font-size: var(--font-size-base);
+    }
+  
+    .set-summary {
+      font-size: var(--font-size-xs);
+      padding: 8px 10px;
+    }
+  }
+  
+  /* Small screens */
+  @media (max-width: 375px) {
+    .workout-card {
+      padding: 12px;
+    }
+  
+    .workout-card-header {
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+    }
+  }
+  
