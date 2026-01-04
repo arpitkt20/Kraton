@@ -1,0 +1,19 @@
+{
+    "name": "Kraton - Performance Journal",
+    "short_name": "Kraton",
+    "description": "Track your workouts and body measurements",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#1a1a1a",
+    "icons": [
+      {
+        "src": "/icon.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
+    ]
+  }
+  
+  
