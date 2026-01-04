@@ -1,18 +1,26 @@
 {
-  "name": "react",
-  "version": "0.0.0",
-  "private": true,
-  "dependencies": {
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0"
-  },
+  "name": "kraton",
+  "version": "1.0.0",
+  "description": "Workout logging app",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "dev": "vite --host",
+    "build": "vite build",
+    "build:gh-pages": "cross-env GITHUB_PAGES=true vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build:gh-pages && gh-pages -d dist"
+  },
+  "dependencies": {
+    "dexie": "^4.2.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "react-scripts": "latest"
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "cross-env": "^7.0.3",
+    "gh-pages": "^6.1.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.0"
   }
 }
