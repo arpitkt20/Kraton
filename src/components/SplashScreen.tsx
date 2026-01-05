@@ -11,30 +11,18 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
   const [shouldRender, setShouldRender] = useState(true);
 
   useEffect(() => {
-    // Check if splash has been shown before
-    const splashShown = localStorage.getItem('kraton-splash-shown');
-    
-    if (splashShown === 'true') {
-      // Already shown, skip splash immediately
-      setShouldRender(false);
-      onComplete();
-      return;
-    }
-
-    // First time - show splash
+    // Always show splash on app launch
     setShow(true);
 
     // Show splash for 5 seconds
     const timer = setTimeout(() => {
       setShow(false);
-      // Mark as shown in localStorage
-      localStorage.setItem('kraton-splash-shown', 'true');
       // Call onComplete after fade out animation
       setTimeout(() => {
         setShouldRender(false);
         onComplete();
       }, 300); // Wait for fade out animation
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [onComplete]);

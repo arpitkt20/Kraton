@@ -36,24 +36,7 @@ const WorkoutEditor: React.FC<WorkoutEditorProps> = ({ workout, onBack, onSave }
     loadData();
   }, [workout]);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    if (!showExerciseSelector) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.exercise-selector')) {
-        setShowExerciseSelector(false);
-        setSearchTerm('');
-        setSelectedExerciseId('');
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showExerciseSelector]);
+  // Close dropdown when clicking outside (removed - now handled by overlay click)
 
   const handleSave = () => {
     const newErrors: { [key: string]: string } = {};
@@ -88,7 +71,10 @@ const WorkoutEditor: React.FC<WorkoutEditorProps> = ({ workout, onBack, onSave }
       return e.name.toLowerCase().replace(/\s+/g, '-') === idToUse;
     });
 
-    if (!exercise) return;
+    if (!exercise) {
+      console.error('Exercise not found:', idToUse);
+      return;
+    }
 
     const newExercise: RegimeExercise = {
       exerciseId: idToUse,
@@ -97,7 +83,8 @@ const WorkoutEditor: React.FC<WorkoutEditorProps> = ({ workout, onBack, onSave }
       reps: 10,
     };
 
-    setExercises([...exercises, newExercise]);
+    // Use functional update to avoid closure issues
+    setExercises(prevExercises => [...prevExercises, newExercise]);
     setSelectedExerciseId('');
     setSearchTerm('');
     setShowExerciseSelector(false);
@@ -188,65 +175,77 @@ const WorkoutEditor: React.FC<WorkoutEditorProps> = ({ workout, onBack, onSave }
           </div>
 
           {showExerciseSelector && (
-            <div className="exercise-selector">
-              <div className="exercise-search-container">
-                <input
-                  type="text"
-                  className="exercise-search-input"
-                  placeholder="Search exercises..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  autoFocus
-                />
-                <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
-                  <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <div className="exercise-dropdown">
-                {(() => {
-                  const { grouped, sortedCategories } = getGroupedExercises();
-                  if (sortedCategories.length === 0) {
-                    return (
-                      <div className="exercise-dropdown-empty">
-                        <p>No exercises found</p>
+            <div className="exercise-selector-overlay" onClick={() => {
+              setShowExerciseSelector(false);
+              setSearchTerm('');
+              setSelectedExerciseId('');
+            }}>
+              <div className="exercise-selector-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="exercise-selector-header">
+                  <h3 className="exercise-selector-title">Select Exercise</h3>
+                  <button
+                    className="exercise-selector-close"
+                    onClick={() => {
+                      setShowExerciseSelector(false);
+                      setSearchTerm('');
+                      setSelectedExerciseId('');
+                    }}
+                    aria-label="Close"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+                <div className="exercise-search-container">
+                  <input
+                    type="text"
+                    className="exercise-search-input"
+                    placeholder="Search exercises..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    autoFocus
+                  />
+                  <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                    <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <div className="exercise-dropdown">
+                  {(() => {
+                    const { grouped, sortedCategories } = getGroupedExercises();
+                    if (sortedCategories.length === 0) {
+                      return (
+                        <div className="exercise-dropdown-empty">
+                          <p>No exercises found</p>
+                        </div>
+                      );
+                    }
+                    return sortedCategories.map(category => (
+                      <div key={category} className="exercise-category-group">
+                        <div className="exercise-category-header">{category}</div>
+                        {grouped[category].map(exercise => {
+                          const exerciseId = exercise.name.toLowerCase().replace(/\s+/g, '-');
+                          return (
+                            <div
+                              key={exerciseId}
+                              className={`exercise-option ${selectedExerciseId === exerciseId ? 'selected' : ''}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleAddExercise(exerciseId);
+                              }}
+                            >
+                              <span className="exercise-option-name">{exercise.name}</span>
+                              <span className="exercise-option-type">{exercise.type}</span>
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  }
-                  return sortedCategories.map(category => (
-                    <div key={category} className="exercise-category-group">
-                      <div className="exercise-category-header">{category}</div>
-                      {grouped[category].map(exercise => {
-                        const exerciseId = exercise.name.toLowerCase().replace(/\s+/g, '-');
-                        return (
-                          <div
-                            key={exerciseId}
-                            className={`exercise-option ${selectedExerciseId === exerciseId ? 'selected' : ''}`}
-                            onClick={() => {
-                              setSelectedExerciseId(exerciseId);
-                              handleAddExercise(exerciseId);
-                            }}
-                          >
-                            <span className="exercise-option-name">{exercise.name}</span>
-                            <span className="exercise-option-type">{exercise.type}</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ));
-                })()}
-              </div>
-              <div className="exercise-selector-actions">
-                <button 
-                  className="cancel-button" 
-                  onClick={() => {
-                    setShowExerciseSelector(false);
-                    setSearchTerm('');
-                    setSelectedExerciseId('');
-                  }}
-                >
-                  Cancel
-                </button>
+                    ));
+                  })()}
+                </div>
               </div>
             </div>
           )}

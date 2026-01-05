@@ -22,7 +22,6 @@ const ActiveWorkout: React.FC<ActiveWorkoutProps> = ({ regime, workout, selected
   const [isSaving, setIsSaving] = useState(false);
   const [showExerciseSelector, setShowExerciseSelector] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [draggedExerciseIndex, setDraggedExerciseIndex] = useState<number | null>(null);
   const [restTime, setRestTime] = useState<number>(60); // Rest time in seconds
   const [timerActive, setTimerActive] = useState<boolean>(false);
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
@@ -33,6 +32,7 @@ const ActiveWorkout: React.FC<ActiveWorkoutProps> = ({ regime, workout, selected
   const [notesInput, setNotesInput] = useState<string>('');
   const [historyModal, setHistoryModal] = useState<{ exerciseId: string; exerciseName: string } | null>(null);
   const [exerciseHistory, setExerciseHistory] = useState<any[]>([]);
+  const [collapsedExercises, setCollapsedExercises] = useState<Set<number>>(new Set());
 
   // Load rest time setting
   useEffect(() => {
@@ -386,10 +386,19 @@ const ActiveWorkout: React.FC<ActiveWorkoutProps> = ({ regime, workout, selected
     setExercises(updated);
   };
 
-  const handleMoveExercise = (fromIndex: number, toIndex: number) => {
+  const handleMoveExerciseUp = (exerciseIndex: number) => {
+    if (exerciseIndex === 0) return; // Already at top
     const updated = [...exercises];
-    const [moved] = updated.splice(fromIndex, 1);
-    updated.splice(toIndex, 0, moved);
+    const [moved] = updated.splice(exerciseIndex, 1);
+    updated.splice(exerciseIndex - 1, 0, moved);
+    setExercises(updated);
+  };
+
+  const handleMoveExerciseDown = (exerciseIndex: number) => {
+    if (exerciseIndex === exercises.length - 1) return; // Already at bottom
+    const updated = [...exercises];
+    const [moved] = updated.splice(exerciseIndex, 1);
+    updated.splice(exerciseIndex + 1, 0, moved);
     setExercises(updated);
   };
 
@@ -478,32 +487,286 @@ const ActiveWorkout: React.FC<ActiveWorkoutProps> = ({ regime, workout, selected
           <p className="active-workout-subtitle">{regime.name}</p>
         </div>
         <div className="active-workout-header-right">
-          {timerActive && (
-            <div className="rest-timer-display">
-              <div className="rest-timer-label">Rest</div>
-              <div className={`rest-timer-time ${timeRemaining <= 10 ? 'timer-warning' : ''}`}>
-                {formatTime(timeRemaining)}
-              </div>
-              <button
-                className="rest-timer-stop"
-                onClick={handleTimerStop}
-                aria-label="Stop timer"
-                title="Stop timer"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/>
-                </svg>
-              </button>
-            </div>
-          )}
           <button className="save-workout-button" onClick={handleSave} disabled={isSaving}>
             {isSaving ? 'Saving...' : 'Save'}
           </button>
         </div>
       </header>
 
+      {timerActive && (
+        <div className="rest-timer-banner">
+          <div className="rest-timer-banner-content">
+            <div className="rest-timer-banner-left">
+              <div className="rest-timer-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className="rest-timer-banner-text">
+                <div className="rest-timer-banner-label">Rest Time</div>
+                <div className={`rest-timer-banner-time ${timeRemaining <= 10 ? 'timer-warning' : ''}`}>
+                  {formatTime(timeRemaining)}
+                </div>
+              </div>
+            </div>
+            <button
+              className="rest-timer-banner-stop"
+              onClick={handleTimerStop}
+              aria-label="Stop timer"
+              title="Stop timer"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="active-workout-content">
-        {/* Add Exercise Button */}
+        {exercises.map((exercise, exerciseIndex) => {
+          const isWeightReps = exercise.exerciseType === 'Weight and Reps';
+          
+          return (
+            <div 
+              key={`${exercise.exerciseId}-${exerciseIndex}`} 
+              className="exercise-card"
+            >
+              <div className="exercise-card-header">
+                <div className="exercise-card-header-left">
+                  <button
+                    className="collapse-exercise-button"
+                    onClick={() => {
+                      const newCollapsed = new Set(collapsedExercises);
+                      if (newCollapsed.has(exerciseIndex)) {
+                        newCollapsed.delete(exerciseIndex);
+                      } else {
+                        newCollapsed.add(exerciseIndex);
+                      }
+                      setCollapsedExercises(newCollapsed);
+                    }}
+                    aria-label={collapsedExercises.has(exerciseIndex) ? "Expand exercise" : "Collapse exercise"}
+                  >
+                    <svg 
+                      width="16" 
+                      height="16" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      xmlns="http://www.w3.org/2000/svg"
+                      style={{ transform: collapsedExercises.has(exerciseIndex) ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+                    >
+                      <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                  <div className="exercise-move-buttons">
+                    <button
+                      className="move-exercise-button move-up-button"
+                      onClick={() => handleMoveExerciseUp(exerciseIndex)}
+                      disabled={exerciseIndex === 0}
+                      aria-label="Move exercise up"
+                      title="Move up"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 15L12 9L6 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    <button
+                      className="move-exercise-button move-down-button"
+                      onClick={() => handleMoveExerciseDown(exerciseIndex)}
+                      disabled={exerciseIndex === exercises.length - 1}
+                      aria-label="Move exercise down"
+                      title="Move down"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <h3 
+                    className="exercise-card-name clickable"
+                    onClick={() => handleOpenHistory(exercise.exerciseId, exercise.exerciseName)}
+                    title="Click to view history"
+                  >
+                    {exercise.exerciseName}
+                  </h3>
+                </div>
+                <button
+                  className="delete-exercise-button"
+                  onClick={() => handleDeleteExercise(exerciseIndex)}
+                  aria-label="Delete exercise"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              
+              {!collapsedExercises.has(exerciseIndex) && (
+              <div className="sets-container">
+                {exercise.sets.map((set, setIndex) => (
+                  <div key={setIndex} className={`set-container ${set.completed ? 'completed' : ''}`}>
+                    <div className={`set-row ${set.completed ? 'completed' : ''}`}>
+                      <div className="set-number-cell">{set.setNumber}</div>
+                      
+                      {isWeightReps ? (
+                        <>
+                          <div className="set-field">
+                            <label className="set-label">Reps</label>
+                            <input
+                              type="number"
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              min="0"
+                              className="set-input"
+                              value={set.reps || ''}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || /^\d+$/.test(value)) {
+                                  handleSetChange(exerciseIndex, setIndex, 'reps', parseInt(value) || 0);
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                                  e.preventDefault();
+                                }
+                              }}
+                              placeholder={set.reps?.toString() || ''}
+                            />
+                          </div>
+                          <div className="set-field">
+                            <label className="set-label">Weight</label>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              pattern="[0-9]*\.?[0-9]*"
+                              min="0"
+                              step="0.5"
+                              className="set-input"
+                              value={set.weight || ''}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                                  handleSetChange(exerciseIndex, setIndex, 'weight', parseFloat(value) || 0);
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (!/[0-9.]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                                  e.preventDefault();
+                                }
+                              }}
+                              placeholder={set.weight?.toString() || ''}
+                            />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="set-field">
+                            <label className="set-label">Distance</label>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              pattern="[0-9]*\.?[0-9]*"
+                              min="0"
+                              step="0.1"
+                              className="set-input"
+                              value={set.distance || ''}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                                  handleSetChange(exerciseIndex, setIndex, 'distance', parseFloat(value) || 0);
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (!/[0-9.]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                                  e.preventDefault();
+                                }
+                              }}
+                              placeholder={set.distance?.toString() || ''}
+                            />
+                          </div>
+                          <div className="set-field">
+                            <label className="set-label">Time</label>
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              pattern="[0-9]*\.?[0-9]*"
+                              min="0"
+                              step="0.1"
+                              className="set-input"
+                              value={set.time || ''}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '' || /^\d*\.?\d*$/.test(value)) {
+                                  handleSetChange(exerciseIndex, setIndex, 'time', parseFloat(value) || 0);
+                                }
+                              }}
+                              onKeyDown={(e) => {
+                                if (!/[0-9.]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+                                  e.preventDefault();
+                                }
+                              }}
+                              placeholder={set.time?.toString() || ''}
+                            />
+                          </div>
+                        </>
+                      )}
+                      
+                      <button
+                        className={`complete-button ${set.completed ? 'completed' : ''}`}
+                        onClick={() => handleToggleComplete(exerciseIndex, setIndex)}
+                      >
+                        {set.completed ? '✓' : '○'}
+                      </button>
+                      
+                      <button
+                        className={`notes-button ${set.notes ? 'has-notes' : ''}`}
+                        onClick={() => handleOpenNotes(exerciseIndex, setIndex)}
+                        aria-label="Add notes"
+                        title={set.notes ? 'Edit notes' : 'Add notes'}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          <path d="M10 9H9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      </button>
+                      
+                      <button
+                        className="delete-set-button"
+                        onClick={() => handleDeleteSet(exerciseIndex, setIndex)}
+                        aria-label="Delete set"
+                        title="Delete set"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                
+                <button
+                  className="add-set-button"
+                  onClick={() => handleAddSet(exerciseIndex)}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  Add Set
+                </button>
+              </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* Add Exercise Button - Moved to bottom */}
         <div className="add-exercise-section">
           <button
             className="add-exercise-button"
@@ -576,176 +839,6 @@ const ActiveWorkout: React.FC<ActiveWorkoutProps> = ({ regime, workout, selected
             </div>
           )}
         </div>
-
-        {exercises.map((exercise, exerciseIndex) => {
-          const isWeightReps = exercise.exerciseType === 'Weight and Reps';
-          
-          return (
-            <div 
-              key={`${exercise.exerciseId}-${exerciseIndex}`} 
-              className="exercise-card"
-              draggable
-              onDragStart={() => setDraggedExerciseIndex(exerciseIndex)}
-              onDragOver={(e) => {
-                e.preventDefault();
-                e.currentTarget.classList.add('drag-over');
-              }}
-              onDragLeave={(e) => {
-                e.currentTarget.classList.remove('drag-over');
-              }}
-              onDrop={(e) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove('drag-over');
-                if (draggedExerciseIndex !== null && draggedExerciseIndex !== exerciseIndex) {
-                  handleMoveExercise(draggedExerciseIndex, exerciseIndex);
-                }
-                setDraggedExerciseIndex(null);
-              }}
-            >
-              <div className="exercise-card-header">
-                <div className="exercise-card-header-left">
-                  <div className="drag-handle" title="Drag to reorder">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="9" cy="5" r="1" fill="currentColor"/>
-                      <circle cx="9" cy="12" r="1" fill="currentColor"/>
-                      <circle cx="9" cy="19" r="1" fill="currentColor"/>
-                      <circle cx="15" cy="5" r="1" fill="currentColor"/>
-                      <circle cx="15" cy="12" r="1" fill="currentColor"/>
-                      <circle cx="15" cy="19" r="1" fill="currentColor"/>
-                    </svg>
-                  </div>
-                  <h3 
-                    className="exercise-card-name clickable"
-                    onClick={() => handleOpenHistory(exercise.exerciseId, exercise.exerciseName)}
-                    title="Click to view history"
-                  >
-                    {exercise.exerciseName}
-                  </h3>
-                </div>
-                <button
-                  className="delete-exercise-button"
-                  onClick={() => handleDeleteExercise(exerciseIndex)}
-                  aria-label="Delete exercise"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </button>
-              </div>
-              
-              <div className="sets-container">
-                {exercise.sets.map((set, setIndex) => (
-                  <div key={setIndex} className={`set-container ${set.completed ? 'completed' : ''}`}>
-                    <div className={`set-row ${set.completed ? 'completed' : ''}`}>
-                      <div className="set-number">Set {set.setNumber}</div>
-                      
-                      {isWeightReps ? (
-                        <>
-                          <div className="set-field">
-                            <label className="set-label">Reps</label>
-                            <input
-                              type="number"
-                              min="0"
-                              className="set-input"
-                              value={set.reps || ''}
-                              onChange={(e) => handleSetChange(exerciseIndex, setIndex, 'reps', parseInt(e.target.value) || 0)}
-                              placeholder={set.reps?.toString() || ''}
-                            />
-                          </div>
-                          <div className="set-field">
-                            <label className="set-label">Weight (kg)</label>
-                            <input
-                              type="number"
-                              min="0"
-                              step="0.5"
-                              className="set-input"
-                              value={set.weight || ''}
-                              onChange={(e) => handleSetChange(exerciseIndex, setIndex, 'weight', parseFloat(e.target.value) || 0)}
-                              placeholder={set.weight?.toString() || ''}
-                            />
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="set-field">
-                            <label className="set-label">Distance</label>
-                            <input
-                              type="number"
-                              min="0"
-                              step="0.1"
-                              className="set-input"
-                              value={set.distance || ''}
-                              onChange={(e) => handleSetChange(exerciseIndex, setIndex, 'distance', parseFloat(e.target.value) || 0)}
-                              placeholder={set.distance?.toString() || ''}
-                            />
-                          </div>
-                          <div className="set-field">
-                            <label className="set-label">Time (min)</label>
-                            <input
-                              type="number"
-                              min="0"
-                              step="0.1"
-                              className="set-input"
-                              value={set.time || ''}
-                              onChange={(e) => handleSetChange(exerciseIndex, setIndex, 'time', parseFloat(e.target.value) || 0)}
-                              placeholder={set.time?.toString() || ''}
-                            />
-                          </div>
-                        </>
-                      )}
-                      
-                      <button
-                        className={`complete-button ${set.completed ? 'completed' : ''}`}
-                        onClick={() => handleToggleComplete(exerciseIndex, setIndex)}
-                      >
-                        {set.completed ? '✓' : '○'}
-                      </button>
-                      
-                      <button
-                        className={`notes-button ${set.notes ? 'has-notes' : ''}`}
-                        onClick={() => handleOpenNotes(exerciseIndex, setIndex)}
-                        aria-label="Add notes"
-                        title={set.notes ? 'Edit notes' : 'Add notes'}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                          <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                          <path d="M10 9H9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      </button>
-                      
-                      <button
-                        className="delete-set-button"
-                        onClick={() => handleDeleteSet(exerciseIndex, setIndex)}
-                        aria-label="Delete set"
-                        title="Delete set"
-                      >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                
-                <button
-                  className="add-set-button"
-                  onClick={() => handleAddSet(exerciseIndex)}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                  Add Set
-                </button>
-              </div>
-            </div>
-          );
-        }        )}
 
         {/* Notes Modal */}
         {notesModal && (
