@@ -111,6 +111,31 @@ html {
   text-rendering: optimizeLegibility;
   /* Prevent text size adjustment on iOS */
   -webkit-text-size-adjust: 100%;
+  /* Prevent zoom on double tap */
+  touch-action: manipulation;
+  /* Prevent text selection that can trigger zoom */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Re-enable text selection for inputs and text areas */
+input, textarea, select {
+  -webkit-user-select: text;
+  user-select: text;
+  /* Prevent iOS auto-zoom on focus - minimum 16px font-size */
+  font-size: 16px !important;
+  /* Prevent zoom gestures on inputs */
+  touch-action: manipulation;
+}
+
+/* For inputs that need smaller text, use transform scale instead */
+input[type="number"],
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+textarea {
+  /* Ensure minimum 16px to prevent iOS zoom */
+  font-size: max(16px, 1em);
 }
 
 body {
@@ -124,6 +149,10 @@ body {
   background-color: var(--bg-secondary);
   /* Smooth scrolling for iOS */
   -webkit-overflow-scrolling: touch;
+  /* Prevent zoom gestures */
+  touch-action: pan-x pan-y;
+  /* Prevent pull-to-refresh zoom on iOS */
+  overscroll-behavior-y: contain;
 }
 
 /* App Container */

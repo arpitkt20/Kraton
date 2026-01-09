@@ -119,7 +119,7 @@
     min-height: var(--touch-target-min);
     border: 2px solid var(--border-light);
     border-radius: var(--radius-md);
-    font-size: var(--font-size-base);
+    font-size: 16px;
     font-family: var(--font-family);
     color: var(--text-primary);
     background-color: var(--bg-primary);
