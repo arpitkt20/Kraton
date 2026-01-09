@@ -635,7 +635,7 @@ const WorkoutLog: React.FC = () => {
             onClick={handleHomeClick}
             aria-label="Go to home"
           >
-            <img src="/kraton_banner.png" alt="Kraton" className="banner-logo" />
+            <img src="/Kraton/kraton_banner.png" alt="Kraton" className="banner-logo" />
           </button>
         </div>
         <div className="header-right">
